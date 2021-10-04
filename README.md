@@ -14,8 +14,6 @@
 
 ```
 yarn plop <ComponentName>
-or
-npx plop <ComponentName>
 ```
 
 ## 调试、开发组件库启动文档服务
