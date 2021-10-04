@@ -1,16 +1,16 @@
 {
-  "name": "sum-react",
-  "version": "0.5.0",
+  "name": "@biz/react-components",
+  "version": "0.0.1",
   "description": "基于 React 的业务组件库",
   "private": false,
   "license": "MIT",
   "main": "./lib/index.main.js",
   "module": "./lib/index.module.js",
   "typings": "./lib/index.d.ts",
-  "homepage": "https://leitingting08.github.io/sum-react",
+  "homepage": "https://babyhzz.github.io/react-components",
   "repository": {
     "type": "git",
-    "url": "https://github.com/leitingting08/sum-react"
+    "url": "https://babyhzz.github.io/react-components"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
