@@ -10,14 +10,14 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v2.3.1
 
-      # - name: Install and Build 🔧 
+      # - name: Install and Build
       #   run: |
       #     npm install
       #     npm run build:doc
 
-      - name: Deploy 🚀
+      - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.5
         with:
-          access_token: ${{ secrets.ACCESS_TOKEN }}
+          # access_token: ${{ secrets.ACCESS_TOKEN }}
           branch: gh-pages # The branch the action should deploy to.
           folder: docs # The folder the action should deploy.
