@@ -3,7 +3,7 @@
 /lib
 /es
 /coverage
-/docs
+/dist_docs
 
 # local env files
 .env.local
