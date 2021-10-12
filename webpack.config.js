@@ -1,3 +1,5 @@
+const path = require("path");
+
 module.exports = {
   entry: './components/index.js',
   module: {
@@ -11,19 +13,37 @@ module.exports = {
         },
       },
       {
-        test: /\.(css|less)?$/,
+        test: /\.less$/,
+        include: /node_modules/,
         use: [
-          { loader: require.resolve('style-loader') },
-          { loader: require.resolve('css-loader') },
+          "style-loader",
+          "css-loader",
           {
-            loader: require.resolve('less-loader'),
+            loader: "less-loader",
             options: {
               lessOptions: {
                 javascriptEnabled: true,
                 modifyVars: { '@primary-color': '#42b983' },
               },
             },
+          }
+        ],
+      },
+      {
+        test: /\.less$/,
+        exclude: /node_modules/,
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              modules: {
+                localIdentContext: path.resolve(__dirname, "components"),
+                localIdentName: "[hash:base64]",
+              },
+            },
           },
+          "less-loader",
         ],
       },
       {

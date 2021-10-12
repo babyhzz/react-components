@@ -1,0 +1,36 @@
+.container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+
+  .leftBtn {
+    left: 1px;
+  }
+
+  .rightBtn {
+    right: 1px;
+  }
+
+  .datePickerContainer {
+    flex: 1;
+
+    .datePicker {
+      width: 100%;
+      border-radius: 0;
+      z-index: 1;
+    }
+
+    :global {
+      .ant-picker-input input {
+        text-align: center;
+      }
+    }
+  }
+
+
+  :global {
+    .ant-picker {
+      padding: 4px 6px;
+    }
+  }
+}

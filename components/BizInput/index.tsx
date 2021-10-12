@@ -1,9 +1,9 @@
-import { Input } from 'antd';
+import { Input, InputProps } from 'antd';
 import React, { useRef } from 'react';
 import './index.less';
 
-interface BizInputProps {
-  [key: string]: any,
+interface BizInputProps extends InputProps {
+
 }
 
 /**

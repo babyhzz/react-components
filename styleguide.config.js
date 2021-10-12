@@ -5,7 +5,7 @@ const pkg = require(packagePath);
 module.exports = {
   title: 'React 业务组件库',
   version: pkg.version, // 同上 使用 package.json 的 version
-  usageMode: 'expand',  // 自动打开文档的缩放
+  usageMode: 'hide',  // 自动打开文档的缩放
   pagePerSection: true, // 是否每页一个组件显示
   styleguideDir: 'dist_docs',
   components: 'components/**/*.tsx',  // 写入对应目录的文档
@@ -14,7 +14,7 @@ module.exports = {
   propsParser: require('react-docgen-typescript')
     .withCustomConfig('./tsconfig.json', {
       shouldRemoveUndefinedFromOptional: true,
-    }).parse,     // 用来支持 tsx
+    }).parse,
   verbose: true,  // 打印详细信息
   compilerConfig: {
     target: { ie: 11 },
