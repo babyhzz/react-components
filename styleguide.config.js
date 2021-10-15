@@ -2,10 +2,11 @@ const path = require('path');
 const packagePath = path.resolve(__dirname, 'package.json');
 const pkg = require(packagePath);
 
+// React Styleguidist官网：https://react-styleguidist.js.org/
 module.exports = {
   title: 'React 业务组件库',
   version: pkg.version, // 同上 使用 package.json 的 version
-  usageMode: 'hide',  // 自动打开文档的缩放
+  usageMode: 'expand',  // 自动打开文档的缩放
   pagePerSection: true, // 是否每页一个组件显示
   styleguideDir: 'dist_docs',
   components: 'components/**/*.tsx',  // 写入对应目录的文档

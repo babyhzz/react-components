@@ -1,64 +1,71 @@
-import React from 'react';
-import moment, { DurationInputArg2 } from 'moment';
+import React, { useMemo, useState } from 'react';
+import moment, {  unitOfTime } from 'moment';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, DatePicker, DatePickerProps } from 'antd';
 import styles from './index.less';
-import { useState } from 'react-router/node_modules/@types/react';
 
-// DatePickerProps 是 type 方式，这里只能使用 type 方式声明
-type BizDayStepPickerProps = Omit<DatePickerProps, 'picker'> & {
-  picker: 'date' | 'month';
+type Step = -1 | 1;
+type PickerMode = "date" | "week" | "month" | "year";
+
+type BizStepDatePickerProps = Pick<DatePickerProps, 
+  "format" | "value" | "onChange"
+> & {
+  picker: PickerMode;
 };
 
-const pickerUnitMap = {
+type PickerMomentUnit = Extract<unitOfTime.Base, 'year' | 'month' | 'week' | 'day'>;
+const unitMap: {
+  [p in PickerMode]: PickerMomentUnit
+} = {
   date: 'day',
+  week: 'week',
   month: 'month',
-};
+  year: 'year',
+}
 
 /**
- * BizDatePicker 组件，除可手动选择外，左右添加按钮进行前进后退等操作
+ * BizStepDatePicker 组件，除可手动选择外，左右添加按钮进行前进后退等操作
  */
-const BizDayStepPicker: React.FC<BizDayStepPickerProps> = (props) => {
+const BizStepDatePicker: React.FC<BizStepDatePickerProps> = (props) => {
   const { value, onChange, picker = 'date', ...rest } = props;
 
-  // const datePickerRef = useRef();
-  // const [showWeekDay, setShowWeekDay] = useState(false);
+  const [currentVal, setCurrentVal] = useState(value);
+
+  if (value !== undefined && value !== currentVal) {
+    setCurrentVal(value);
+  }
+
+  function oneStepChange(step: Step) {
+    const newVal = moment(currentVal).add(step, unitMap[picker]);
+    setCurrentVal(newVal);
+    // if (onChange) {
+    //   onChange(newVal);
+    // }
+  }
 
   function plusOneStep() {
-    const newVal = moment(value).add(1, pickerUnitMap[picker] as DurationInputArg2);
-
-    if (onChange) {
-      onChange(newVal);
-    }
+    oneStepChange(1);
   }
 
   function minusOneStep() {
-    const newVal = moment(value).subtract(1, 'day');
-
-    if (onChange) {
-      onChange(newVal);
-    }
+    oneStepChange(-1);
   }
 
-  // useEffect(() => {
-  //   // 监听 window size 变化，动态控制是否显示【星期几】
-  //   function handleSizeChange() {
-  //     if (datePickerRef.current) {
-  //       const dom = datePickerRef.current;
-
-  //       if (dom.offsetWidth > 142) {
-  //         setShowWeekDay(true);
-  //       } else {
-  //         setShowWeekDay(false);
-  //       }
-  //     }
-  //   }
-
-  //   handleSizeChange();
-  //   window.addEventListener('resize', handleSizeChange);
-
-  //   return () => window.removeEventListener('resize', handleSizeChange)
-  // }, [])
+  const format = useMemo(() => {
+    if (picker === 'date') {
+      return 'YYYY-MM-DD';
+    } else if (picker === 'month') {
+      return 'YYYY-MM';
+    } else if (picker === 'year') {
+      return 'YYYY';
+    } else if (picker === 'week') {
+      return value => {
+        const firstWeekday = moment(value).startOf('week').format('YYYY-MM-DD');
+        const lastWeekday = moment(value).endOf('week').format('YYYY-MM-DD');
+        return `${firstWeekday} ~ ${lastWeekday}`
+      }
+    }
+  }, [picker])
 
   return (
     <Button.Group className={styles.container}>
@@ -68,15 +75,15 @@ const BizDayStepPicker: React.FC<BizDayStepPickerProps> = (props) => {
         onClick={minusOneStep}
       />
       <div
-        // ref={datePickerRef}
         className={styles.datePickerContainer}
       >
         <DatePicker
-          {...rest}
-          value={value}
-          onChange={onChange}
+          picker={picker}
+          value={currentVal}
           className={styles.datePicker}
-          // format={showWeekDay ? 'YYYY-MM-DD dddd' : 'YYYY-MM-DD' }
+          allowClear={false}
+          format={format}
+          onChange={onChange}
         />
       </div>
       <Button
@@ -88,4 +95,4 @@ const BizDayStepPicker: React.FC<BizDayStepPickerProps> = (props) => {
   );
 };
 
-export default BizDayStepPicker;
+export default BizStepDatePicker;
