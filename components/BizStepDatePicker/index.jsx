@@ -1,22 +1,11 @@
 import React, { useMemo, useState } from 'react';
-import moment, {  unitOfTime } from 'moment';
+import moment from 'moment';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { Button, DatePicker, DatePickerProps } from 'antd';
+import { Button, DatePicker } from 'antd';
 import styles from './index.less';
+import PropTypes from 'prop-types';
 
-type Step = -1 | 1;
-type PickerMode = "date" | "week" | "month" | "year";
-
-type BizStepDatePickerProps = Pick<DatePickerProps, 
-  "format" | "value" | "onChange"
-> & {
-  picker: PickerMode;
-};
-
-type PickerMomentUnit = Extract<unitOfTime.Base, 'year' | 'month' | 'week' | 'day'>;
-const unitMap: {
-  [p in PickerMode]: PickerMomentUnit
-} = {
+const unitMap = {
   date: 'day',
   week: 'week',
   month: 'month',
@@ -26,21 +15,14 @@ const unitMap: {
 /**
  * BizStepDatePicker 组件，除可手动选择外，左右添加按钮进行前进后退等操作
  */
-const BizStepDatePicker: React.FC<BizStepDatePickerProps> = (props) => {
-  const { value, onChange, picker = 'date', ...rest } = props;
+const BizStepDatePicker = (props) => {
+  const { value, onChange, picker, ...rest } = props;
 
-  const [currentVal, setCurrentVal] = useState(value);
-
-  if (value !== undefined && value !== currentVal) {
-    setCurrentVal(value);
-  }
-
-  function oneStepChange(step: Step) {
-    const newVal = moment(currentVal).add(step, unitMap[picker]);
-    setCurrentVal(newVal);
-    // if (onChange) {
-    //   onChange(newVal);
-    // }
+  function oneStepChange(step) {
+    const newVal = moment(value).add(step, unitMap[picker]);
+    if (onChange) {
+      onChange(newVal);
+    }
   }
 
   function plusOneStep() {
@@ -78,11 +60,12 @@ const BizStepDatePicker: React.FC<BizStepDatePickerProps> = (props) => {
         className={styles.datePickerContainer}
       >
         <DatePicker
+          {...rest}
+          value={value}
           picker={picker}
-          value={currentVal}
-          className={styles.datePicker}
-          allowClear={false}
           format={format}
+          allowClear={false}
+          className={styles.datePicker}
           onChange={onChange}
         />
       </div>
@@ -94,5 +77,20 @@ const BizStepDatePicker: React.FC<BizStepDatePickerProps> = (props) => {
     </Button.Group>
   );
 };
+
+BizStepDatePicker.propTypes = {
+  /**
+   * 以何种方式展示，天/周/月/年
+   */
+  picker: PropTypes.oneOf(["date", 'week', 'month', 'year']),
+
+
+  value: PropTypes.instanceOf(moment),
+}
+
+BizStepDatePicker.defaultProps = {
+  picker: "date",
+  value: moment(),
+}
 
 export default BizStepDatePicker;

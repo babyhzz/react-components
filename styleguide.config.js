@@ -9,13 +9,15 @@ module.exports = {
   usageMode: 'expand',  // 自动打开文档的缩放
   pagePerSection: true, // 是否每页一个组件显示
   styleguideDir: 'dist_docs',
-  components: 'components/**/*.tsx',  // 写入对应目录的文档
   exampleMode: 'expand',  // 表示示例代码是否展开或者合上文档中代码示例的标签初始化状态，决定是否展开
   webpackConfig: require('./webpack.config'),
-  propsParser: require('react-docgen-typescript')
-    .withCustomConfig('./tsconfig.json', {
-      shouldRemoveUndefinedFromOptional: true,
-    }).parse,
+  components: 'components/**/*.jsx',
+  // [2021.11.21]暂时先用 JSX 去书写，TS 暂时还不熟
+  // components: 'components/**/*.tsx',  // 写入对应目录的文档
+  // propsParser: require('react-docgen-typescript')
+  //   .withCustomConfig('./tsconfig.json', {
+  //     shouldRemoveUndefinedFromOptional: true,
+  //   }).parse,
   verbose: true,  // 打印详细信息
   compilerConfig: {
     target: { ie: 11 },
@@ -27,7 +29,7 @@ module.exports = {
   },
   // 优化文档中的组件名
   getComponentPathLine(componentPath) {
-    const name = path.basename(componentPath.replace(/index.tsx/g, ''));
+    const name = path.basename(componentPath.replace(/index.jsx/g, ''));
     return `import { ${name} } from '${pkg.name}'`;
   },
   // 在使用 @version 时 使用 package.json 的 version
